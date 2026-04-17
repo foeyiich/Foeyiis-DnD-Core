@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.server.config;
+package me.foeyii.fdndcore.config;
 
 import me.foeyii.fdndcore.FConfigBase;
 import net.neoforged.neoforge.common.ModConfigSpec;

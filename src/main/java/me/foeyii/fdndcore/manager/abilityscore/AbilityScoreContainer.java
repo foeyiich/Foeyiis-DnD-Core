@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.server.manager.abilityscore;
+package me.foeyii.fdndcore.manager.abilityscore;
 
 import lombok.Getter;
 import me.foeyii.fdndcore.FoeyiisDnDCore;

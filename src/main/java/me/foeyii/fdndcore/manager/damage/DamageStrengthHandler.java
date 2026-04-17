@@ -1,8 +1,8 @@
-package me.foeyii.fdndcore.server.manager.damage;
+package me.foeyii.fdndcore.manager.damage;
 
 import me.foeyii.fdndcore.FoeyiisDnDCore;
-import me.foeyii.fdndcore.server.manager.abilityscore.AbilityScoreContainer;
-import me.foeyii.fdndcore.server.manager.dice.Dice;
+import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.manager.dice.Dice;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
@@ -23,7 +24,7 @@ public class DamageStrengthHandler {
 
     private final Map<UUID, Map<DamageType, Integer>> damageRollsCache = new WeakHashMap<>();
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onDamagePre(LivingDamageEvent.Pre event) {
         if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) return;
 
@@ -43,9 +44,9 @@ public class DamageStrengthHandler {
         if (!itemStack.is(Items.AIR)) {
             baseDamage /= 2;
         }
-        pool.addDice(DamageTypeRegistry.PHYSICAL.get(), DamageItemManager.getDiceFinalDamage(itemStack, attacker.level()));
+        pool.addDice(DamageTypeRegistry.PHYSICAL.get(), DamageItemManager.getDice(itemStack, attacker.level()));
 
-        pool.addDice(DamageTypeRegistry.PHYSICAL.get(), Dice.calculateFromInt(baseDamage));
+        pool.addDice(DamageTypeRegistry.PHYSICAL.get(), Dice.generateFromInt(baseDamage));
 
         pool.rollAll(random);
 
@@ -54,7 +55,7 @@ public class DamageStrengthHandler {
         damageRollsCache.put(attacker.getUUID(), pool.getResults());
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onDamagePost(LivingDamageEvent.Post event) {
         if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) return;
 

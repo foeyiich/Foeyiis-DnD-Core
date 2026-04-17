@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.server.manager.damage;
+package me.foeyii.fdndcore.manager.damage;
 
 import me.foeyii.fdndcore.FoeyiisDnDCore;
 import net.minecraft.core.Registry;

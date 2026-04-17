@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.server.manager.abilityscore;
+package me.foeyii.fdndcore.manager.abilityscore;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;

@@ -2,12 +2,10 @@ package me.foeyii.fdndcore;
 
 import com.mojang.logging.LogUtils;
 import lombok.Getter;
-import me.foeyii.fdndcore.server.command.MainCommand;
-import me.foeyii.fdndcore.server.config.FConfigItemDamage;
-import me.foeyii.fdndcore.server.manager.abilityscore.AbilityScoreManager;
-import me.foeyii.fdndcore.server.manager.damage.DamageItemDataComponent;
-import me.foeyii.fdndcore.server.manager.damage.DamageItemManager;
-import me.foeyii.fdndcore.server.manager.damage.DamageTypeRegistry;
+import me.foeyii.fdndcore.command.MainCommand;
+import me.foeyii.fdndcore.config.FConfigItemDamage;
+import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreManager;
+import me.foeyii.fdndcore.manager.damage.DamageManager;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -37,15 +35,12 @@ public class FoeyiisDnDCore {
 
         NeoForge.EVENT_BUS.register(this);
 
-        DamageItemManager.register();
-        DamageTypeRegistry.register(modEventBus);
-
         AbilityScoreManager.register(modEventBus);
+        DamageManager.register(modEventBus);
 
         FConfigBase.register(modContainer, ModConfig.Type.SERVER, FConfigItemDamage.SPEC, "item-damage");
 
         ATTACHMENT_TYPES.register(modEventBus);
-        DamageItemDataComponent.register(modEventBus);
 
     }
 

@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.server.manager.damage;
+package me.foeyii.fdndcore.manager.damage;
 
 import com.mojang.serialization.Codec;
 import me.foeyii.fdndcore.FoeyiisDnDCore;

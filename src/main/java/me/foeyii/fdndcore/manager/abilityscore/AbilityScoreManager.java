@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.server.manager.abilityscore;
+package me.foeyii.fdndcore.manager.abilityscore;
 
 import me.foeyii.fdndcore.FoeyiisDnDCore;
 import net.minecraft.core.Holder;

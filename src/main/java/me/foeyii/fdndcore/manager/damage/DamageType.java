@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.server.manager.damage;
+package me.foeyii.fdndcore.manager.damage;
 
 import net.minecraft.network.chat.TextColor;
 
