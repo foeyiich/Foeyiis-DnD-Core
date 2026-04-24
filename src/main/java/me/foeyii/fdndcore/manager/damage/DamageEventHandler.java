@@ -1,12 +1,13 @@
 package me.foeyii.fdndcore.manager.damage;
 
-import me.foeyii.fdndcore.FoeyiisDnDCore;
+import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.data.DnDDamageTypes;
 import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreContainer;
 import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.utility.DnDItemUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,18 +15,24 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-public class DamageStrengthHandler {
+@EventBusSubscriber(modid = DnDCore.MODID)
+public class DamageEventHandler {
+    private DamageEventHandler() {
+        /* This utility class should not be instantiated */
+    }
 
-    private final Map<UUID, Map<DamageType, Integer>> damageRollsCache = new WeakHashMap<>();
+    private static final Map<UUID, Map<DamageType, Integer>> damageRollsCache = new WeakHashMap<>();
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onDamagePre(LivingDamageEvent.Pre event) {
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    static void onDamagePre(LivingIncomingDamageEvent event) {
         if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) return;
 
         DamagePool pool = new DamagePool();
@@ -33,30 +40,28 @@ public class DamageStrengthHandler {
         ItemStack itemStack = attacker.getMainHandItem();
 
         int baseDamage = (int) attacker.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
-        if (attacker instanceof ServerPlayer player) {
-            baseDamage = Math.clamp(
-                    baseDamage + AbilityScoreContainer.get(player).getScoreModifier(AbilityScoreContainer.Types.STRENGTH),
-                    0,
-                    5
-            );
-        }
+        baseDamage = Math.clamp(
+                (long) baseDamage + AbilityScoreContainer.get(attacker).getScoreModifier(AbilityScoreContainer.Types.STRENGTH),
+                -5,
+                5
+        );
 
         if (!itemStack.is(Items.AIR)) {
             baseDamage /= 2;
         }
-        pool.addDice(DamageTypeRegistry.PHYSICAL.get(), DamageItemManager.getDice(itemStack, attacker.level()));
+        pool.addDice(DnDDamageTypes.PHYSICAL.get(), DnDItemUtils.getDice(itemStack, attacker.level()));
 
-        pool.addDice(DamageTypeRegistry.PHYSICAL.get(), Dice.generateFromInt(baseDamage));
+        pool.addDice(DnDDamageTypes.PHYSICAL.get(), Dice.from(baseDamage));
 
         pool.rollAll(random);
 
-        event.setNewDamage(pool.getTotalDamage());
+        event.setAmount(pool.getTotalDamage());
 
         damageRollsCache.put(attacker.getUUID(), pool.getResults());
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onDamagePost(LivingDamageEvent.Post event) {
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onDamagePost(LivingDamageEvent.Post event) {
         if (!(event.getSource().getEntity() instanceof LivingEntity attacker)) return;
 
         Map<DamageType, Integer> results = damageRollsCache.remove(attacker.getUUID());
@@ -66,15 +71,15 @@ public class DamageStrengthHandler {
             component.append("§l[HIT] §r");
 
             results.forEach((type, value) -> {
-                TextColor color = type.getColor();
+                TextColor color = type.color();
                 component
                         .append("| ").withStyle(ChatFormatting.RESET)
                         .append(Component.literal(String.valueOf(value)).withStyle(style -> style.withColor(color)))
                         .append(" ")
-                        .append(Component.literal(type.getName()).withStyle(style -> style.withColor(color)));
+                        .append(Component.literal(type.name()).withStyle(style -> style.withColor(color)));
             });
 
-            FoeyiisDnDCore.getLOGGER().info(component.getString());
+            DnDCore.LOGGER.info(component.getString());
             attacker.sendSystemMessage(component);
 
         }

@@ -1,102 +1,75 @@
 package me.foeyii.fdndcore.manager.dice;
 
-import lombok.Getter;
-import me.foeyii.fdndcore.FoeyiisDnDCore;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import me.foeyii.fdndcore.DnDCore;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
+public record Dice(int count, int sides, int modifier) {
 
-public class Dice {
+    public static final Codec<Dice> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    Codec.INT.fieldOf("count").forGetter(Dice::count),
+                    Codec.INT.fieldOf("sides").forGetter(Dice::sides),
+                    Codec.INT.optionalFieldOf("modifier", 0).forGetter(Dice::modifier)
+            ).apply(instance, Dice::of)
+    );
 
-    public static final boolean SIDES_MUST_BE_EVEN = true;
-    public static final Dice DEFAULT_DICE = new Dice(1, 6);
-    private static final HashMap<String, Dice> CACHED_DICE = new HashMap<>();
+    private static class CACHE {
+        private static final Long2ObjectMap<Dice> cacheMap = new Long2ObjectOpenHashMap<>();
 
-    @Getter
-    private final int count;
-
-    @Getter
-    private final int sides;
-
-    @Getter
-    private final int modifier;
-
-    public static final int MAX_DICE_COUNTS = 10;
-    public static final int MIN_DICE_COUNTS = 0;
-    public static final int MAX_DICE_SIDES = 20;
-    public static final int MIN_DICE_SIDES = 0;
-
-    private Dice(int count, int sides, int modifier) throws IllegalDiceSidesException {
-        if (SIDES_MUST_BE_EVEN && sides % 2 != 0) {
-            throw new IllegalDiceSidesException("Invalid sides for Dice: SIDES MUST BE EVEN!");
+        private static long getKey(int count, int sides, int modifier) {
+            return ((long) (count & 0xFF) << 24) |
+                    ((long) (sides & 0xFF) << 16) |
+                    (modifier & 0xFFFF);
         }
-        this.count = clampCounts(count);
-        this.sides = clampSides(sides);
-        this.modifier = modifier;
     }
 
-    private Dice(int count, int sides) throws IllegalDiceSidesException {
+    public static final Dice FULL = Dice.of(1, 20, 0);
+    public static final Dice EMPTY = Dice.of(0, 0, 0);
+
+    public static final boolean SIDES_MUST_BE_EVEN = true;
+    public static final int MAX_DICE_COUNTS = 10;
+    public static final int MAX_DICE_SIDES = 20;
+
+    public Dice {
+        if (count == 0)
+            sides = 0;
+        if (sides == 0)
+            count = 0;
+
+        count = Math.clamp(count, 0, MAX_DICE_COUNTS);
+        sides = Math.clamp(sides, 0, MAX_DICE_SIDES);
+
+        if (SIDES_MUST_BE_EVEN && sides % 2 != 0) {
+            int oldSides = sides;
+            sides++;
+            DnDCore.LOGGER.warn("Invalid sides for Dice ({}). returning with {} sides", oldSides, sides);
+        }
+    }
+
+    public Dice(int count, int sides) {
         this(count, sides, 0);
     }
 
-    public static @NotNull Dice of(int count, int sides) {
-        String diceNotation = DiceNotation.stringify(count, sides);
-        if (CACHED_DICE.containsKey(diceNotation))
-            return CACHED_DICE.get(diceNotation);
-
-        final Dice dice;
-        try {
-            dice = new Dice(count, sides);
-        } catch (IllegalDiceSidesException e) {
-            FoeyiisDnDCore.getLOGGER().error("Invalid dice notation '{}': Dice sides must be even!", diceNotation);
-            return DEFAULT_DICE;
-        }
-        CACHED_DICE.put(diceNotation, dice);
-        return dice;
-    }
-
     public static @NotNull Dice of(int count, int sides, int modifier) {
-        return new Dice(count, sides, modifier);
+        return CACHE.cacheMap.computeIfAbsent(CACHE.getKey(count, sides, modifier), k -> new Dice(
+                Math.clamp(count, 0, MAX_DICE_COUNTS),
+                Math.clamp(sides, 0, MAX_DICE_SIDES),
+                modifier
+        ));
     }
 
-    public static @NotNull Dice of(String notation) {
-        Dice dice;
-        try {
-            dice = DiceNotation.parse(notation);
-        } catch (IllegalDiceSidesException e) {
-            dice = DEFAULT_DICE;
-            FoeyiisDnDCore.getLOGGER().error("Invalid dice notation '{}'", notation);
-        }
-        return dice;
+    public static Dice of(int count, int sides) {
+        return of(count, sides, 0);
     }
 
-    public static @NotNull Dice generateFromInt(int base) {
-        if (base <= 0) return of(0, 0);
-        if (base < 2) return of(0, 0, base);
+    public int roll(RandomSource random) {
+        if (sides <= 0 || count <= 0) return modifier;
 
-        int count = (int) Math.ceil(base / 20.0f);
-        count = Math.clamp(count, 1, MAX_DICE_COUNTS);
-
-        int rawSides = base / count;
-        int sides = (SIDES_MUST_BE_EVEN && rawSides % 2 != 0) ? rawSides - 1 : rawSides;
-        sides = Math.clamp(sides, 0, MAX_DICE_SIDES);
-
-        int diff = base - (count * sides);
-        return of(count, sides, diff);
-    }
-
-    public int getMinRoll() {
-        return count;
-    }
-
-    public int getMaxRoll() {
-        return count * sides;
-    }
-
-    public int roll(net.minecraft.util.RandomSource random) {
-        if (sides <= 0 || count <= 0) return 0;
-        if (count == 1 && sides == 1) return 1;
         int total = 0;
         for (int i = 0; i < count; i++) {
             total += random.nextInt(sides) + 1;
@@ -108,20 +81,42 @@ public class Dice {
         return roll(RandomSource.create());
     }
 
-    public Dice getPureDice() {
-        return of(count, sides, 0);
+    public static @NotNull Dice from(int base) {
+        if (base <= 0) return Dice.EMPTY;
+        if (base == 1) return Dice.of(0, 0, 1);
+
+        int count = Math.clamp(
+                (int) Math.ceil((float) base / MAX_DICE_SIDES),
+                1,
+                MAX_DICE_COUNTS
+        );
+
+        int sides = Math.clamp(base / count, 2, MAX_DICE_SIDES);
+        int modifier = 0;
+
+        int maxRoll = count * sides;
+        if (base - maxRoll > 0)
+            modifier = base - maxRoll;
+
+        return Dice.of(count, sides, modifier);
     }
 
-    public static int clampSides(int value) {
-        return Math.clamp(value, MIN_DICE_SIDES, MAX_DICE_SIDES);
+
+    public boolean isEmpty() {
+        return count == 0 && sides == 0;
     }
 
-    public static int clampCounts(int value) {
-        return Math.clamp(value, MIN_DICE_COUNTS, MAX_DICE_COUNTS);
+    public int getMaxRoll() {
+        return (count * sides) + modifier;
+    }
+
+    public int getMinRoll() {
+        return count + modifier;
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return DiceNotation.stringify(this);
     }
+
 }

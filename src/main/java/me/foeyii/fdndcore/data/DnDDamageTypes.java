@@ -1,6 +1,7 @@
-package me.foeyii.fdndcore.manager.damage;
+package me.foeyii.fdndcore.data;
 
-import me.foeyii.fdndcore.FoeyiisDnDCore;
+import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.manager.damage.DamageType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -9,15 +10,15 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
-public class DamageTypeRegistry {
-    private DamageTypeRegistry() {
+public class DnDDamageTypes {
+    private DnDDamageTypes() {
     }
 
     public static final ResourceKey<Registry<DamageType>> REGISTRY_KEY =
-            ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(FoeyiisDnDCore.MODID, "damage_types"));
+            ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, "damage_types"));
 
     public static final DeferredRegister<DamageType> DAMAGE_TYPES =
-            DeferredRegister.create(REGISTRY_KEY, FoeyiisDnDCore.MODID);
+            DeferredRegister.create(REGISTRY_KEY, DnDCore.MODID);
 
     public static final DeferredHolder<DamageType, DamageType> PHYSICAL = DAMAGE_TYPES.register("physical",
             () -> new DamageType("Physical", 0xFFFFFF));

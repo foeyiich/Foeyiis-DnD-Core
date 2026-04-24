@@ -1,5 +1,10 @@
 {
-  "itemGroup.fdnd_core": "Example Mod Tab",
-  "block.fdnd_core.example_block": "Example Block",
-  "item.fdnd_core.example_item": "Example Item"
+  "itemGroup.fdnd_core": "DnD Core",
+  "attribute.name.generic.attack_roll_bonus": "Attack Roll Bonus",
+  "fdndcore.ability_score.name.strength": "Strength",
+  "fdndcore.ability_score.name.dexterity": "Dexterity",
+  "fdndcore.ability_score.name.constitution": "Constitution",
+  "fdndcore.ability_score.name.intelligence": "Intelligence",
+  "fdndcore.ability_score.name.wisdom": "Wisdom",
+  "fdndcore.ability_score.name.charisma": "Charisma"
 }

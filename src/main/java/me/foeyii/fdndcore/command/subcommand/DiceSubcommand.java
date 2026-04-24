@@ -5,8 +5,8 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import me.foeyii.fdndcore.manager.dice.Dice;
 import me.foeyii.fdndcore.manager.dice.DiceNotation;
-import me.foeyii.fdndcore.manager.dice.IllegalDiceSidesException;
-import me.foeyii.fdndcore.manager.dice.InvalidDiceNotationException;
+import me.foeyii.fdndcore.manager.dice.exception.IllegalDiceSidesException;
+import me.foeyii.fdndcore.manager.dice.exception.InvalidDiceNotationException;
 import me.foeyii.fdndcore.utility.FText;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -56,26 +56,15 @@ public class DiceSubcommand {
             return 0;
         }
 
-        int roll = dice.getPureDice().roll();
+        int roll = dice.roll(source.getLevel().random);
 
-        int modifier = dice.getModifier();
-        String modifierStylized = "";
-        if (modifier > 0) modifierStylized = "&a+" + modifier;
-        else if (modifier < 0) modifierStylized = "&c" + modifier;
-
-        msg = '\n' +
-                FText.formatPrefixed("&eRolling &6" + dice.getCount() + "&e Dice(s) with &6" + dice.getSides() + "&e Sides") + '\n' +
-                FText.formatPrefixed("  &eRoll: &f" + roll) + '\n' +
-                FText.formatPrefixed("  &eModifier: &f" + modifierStylized) + '\n' +
-                FText.formatPrefixed("  &eFinal: &f" + (roll + modifier))
-                + '\n';
-
+        msg = FText.formatPrefixed("&eRolling &6" + dice + "&e: &f" + roll);
         source.sendSystemMessage(Component.literal(msg));
         return 1;
     }
 
     private static int generateDiceNotation(CommandSourceStack source, int base) {
-        String msg = FText.formatPrefixed("&eGenerated Dice: &6" + base + " &e-> &6" + Dice.generateFromInt(base));
+        String msg = FText.formatPrefixed("&eGenerated Dice: &6" + base + " &e-> &6" + Dice.from(base));
         source.sendSystemMessage(Component.literal(msg));
         return 1;
     }
