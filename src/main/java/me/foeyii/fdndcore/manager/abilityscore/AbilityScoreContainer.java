@@ -1,7 +1,10 @@
 package me.foeyii.fdndcore.manager.abilityscore;
 
 import lombok.Getter;
-import me.foeyii.fdndcore.FoeyiisDnDCore;
+import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.utility.DnDUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,9 +23,11 @@ public class AbilityScoreContainer {
         CHARISMA("charisma");
 
         private final String id;
+        private final MutableComponent component;
 
         Types(String s) {
             this.id = s;
+            this.component = Component.translatable("fdndcore.ability_score.name." + s);
         }
 
     }
@@ -30,7 +35,7 @@ public class AbilityScoreContainer {
     public static final int VALUE_RATE = 1;
 
     public static final int MAX_VALUE = 20 * VALUE_RATE;
-    public static final int MIN_VALUE = 6 * VALUE_RATE;
+    public static final int MIN_VALUE = 8 * VALUE_RATE;
     public static final int DEFAULT_VALUE = 10 * VALUE_RATE;
 
     private final EnumMap<Types, Integer> abilities = new EnumMap<>(Types.class);
@@ -61,22 +66,18 @@ public class AbilityScoreContainer {
     }
 
     public int getScoreModifier(Types type) {
-        return calculateModifier(abilities.get(type));
+        return DnDUtils.calculateModifier(abilities.get(type), MAX_VALUE);
     }
 
     public static int clamp(int value) {
         if (value > MAX_VALUE) {
+            DnDCore.LOGGER.warn("Value of {} is greater than {}", value, MAX_VALUE);
             value = MAX_VALUE;
-            FoeyiisDnDCore.getLOGGER().warn("Value of " + value + " is greater than " + MAX_VALUE);
         } else if (value < MIN_VALUE) {
+            DnDCore.LOGGER.warn("Value of {} is less than {}", value, MIN_VALUE);
             value = MIN_VALUE;
-            FoeyiisDnDCore.getLOGGER().warn("Value of " + value + " is less than " + MIN_VALUE);
         }
         return value;
-    }
-
-    public static int calculateModifier(int value) {
-        return Math.floorDiv((value - 10), 2);
     }
 
     public static @NotNull AbilityScoreContainer get(@NotNull LivingEntity entity) {

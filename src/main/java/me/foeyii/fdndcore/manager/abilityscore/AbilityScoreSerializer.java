@@ -10,24 +10,18 @@ public class AbilityScoreSerializer implements IAttachmentSerializer<CompoundTag
     @Override
     public AbilityScoreContainer read(IAttachmentHolder holder, CompoundTag tag, HolderLookup.Provider provider) {
         AbilityScoreContainer stats = new AbilityScoreContainer();
-        stats.setScore(AbilityScoreContainer.Types.STRENGTH, tag.getInt("strength"));
-        stats.setScore(AbilityScoreContainer.Types.DEXTERITY, tag.getInt("dexterity"));
-        stats.setScore(AbilityScoreContainer.Types.CONSTITUTION, tag.getInt("constitution"));
-        stats.setScore(AbilityScoreContainer.Types.INTELLIGENCE, tag.getInt("intelligence"));
-        stats.setScore(AbilityScoreContainer.Types.WISDOM, tag.getInt("wisdom"));
-        stats.setScore(AbilityScoreContainer.Types.CHARISMA, tag.getInt("charisma"));
+        for (AbilityScoreContainer.Types type : AbilityScoreContainer.Types.values()) {
+            stats.setScore(type, tag.getInt(type.getId()));
+        }
         return stats;
     }
 
     @Override
     public CompoundTag write(AbilityScoreContainer stats, HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
-        tag.putInt("strength", stats.getScore(AbilityScoreContainer.Types.STRENGTH));
-        tag.putInt("dexterity", stats.getScore(AbilityScoreContainer.Types.DEXTERITY));
-        tag.putInt("constitution", stats.getScore(AbilityScoreContainer.Types.CONSTITUTION));
-        tag.putInt("intelligence", stats.getScore(AbilityScoreContainer.Types.INTELLIGENCE));
-        tag.putInt("wisdom", stats.getScore(AbilityScoreContainer.Types.WISDOM));
-        tag.putInt("charisma", stats.getScore(AbilityScoreContainer.Types.CHARISMA));
+        for (AbilityScoreContainer.Types type : AbilityScoreContainer.Types.values()) {
+            tag.putInt(type.getId(), stats.getScore(type));
+        }
         return tag;
     }
 }

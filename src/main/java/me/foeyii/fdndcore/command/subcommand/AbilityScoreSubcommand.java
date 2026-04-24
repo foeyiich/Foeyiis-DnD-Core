@@ -2,7 +2,7 @@ package me.foeyii.fdndcore.command.subcommand;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import me.foeyii.fdndcore.FoeyiisDnDCore;
+import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.manager.abilityscore.AbilityScore;
 import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreContainer;
 import me.foeyii.fdndcore.utility.FText;
@@ -67,18 +67,14 @@ public class AbilityScoreSubcommand {
         if (!isEntityALivingEntity(target))
             return 0;
         AbilityScoreContainer targetScores = AbilityScoreContainer.get((LivingEntity) target);
+        
+        StringBuilder result = new StringBuilder();
+        result.append(FText.formatPrefixed("&6" + target.getName().getString() + "'s Stats:\n"));
+        for (AbilityScoreContainer.Types type : AbilityScoreContainer.Types.values()) {
+            result.append(FText.formatPrefixed("  &e" + type.getComponent().getString() + ": " + targetScores.getScore(AbilityScoreContainer.Types.STRENGTH) + '\n'));
+        }
 
-        String msg = '\n' +
-                FText.formatPrefixed("&6" + target.getName().getString() + "'s Stats:\n") +
-                FText.formatPrefixed("  &eStrength: " + targetScores.getScore(AbilityScoreContainer.Types.STRENGTH) + '\n') +
-                FText.formatPrefixed("  &eDexterity: " + targetScores.getScore(AbilityScoreContainer.Types.DEXTERITY) + '\n') +
-                FText.formatPrefixed("  &eConstitution: " + targetScores.getScore(AbilityScoreContainer.Types.CONSTITUTION) + '\n') +
-                FText.formatPrefixed("  &eIntelligence: " + targetScores.getScore(AbilityScoreContainer.Types.INTELLIGENCE) + '\n') +
-                FText.formatPrefixed("  &eWisdom: " + targetScores.getScore(AbilityScoreContainer.Types.WISDOM) + '\n') +
-                FText.formatPrefixed("  &eCharisma: " + targetScores.getScore(AbilityScoreContainer.Types.CHARISMA)) +
-                '\n';
-
-        source.sendSystemMessage(Component.literal(msg));
+        source.sendSystemMessage(Component.literal(result.toString()));
 
         return 1;
     }
@@ -113,7 +109,7 @@ public class AbilityScoreSubcommand {
 
     private static boolean isEntityALivingEntity(Entity entity) {
         if (!(entity instanceof LivingEntity)) {
-            FoeyiisDnDCore.getLOGGER().error("Target is not a LivingEntity!");
+            DnDCore.LOGGER.error("Target is not a LivingEntity!");
             return false;
         }
         return true;

@@ -1,6 +1,6 @@
 package me.foeyii.fdndcore.manager.abilityscore;
 
-import me.foeyii.fdndcore.FoeyiisDnDCore;
+import me.foeyii.fdndcore.DnDCore;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static me.foeyii.fdndcore.FoeyiisDnDCore.ATTACHMENT_TYPES;
+import static me.foeyii.fdndcore.DnDCore.ATTACHMENT_TYPES;
 
 public class AbilityScoreManager {
 
@@ -60,7 +60,7 @@ public class AbilityScoreManager {
     private static void applyModifier(LivingEntity entity, Holder<Attribute> attr, String name, double value) {
         AttributeInstance inst = entity.getAttribute(attr);
         if (inst != null) {
-            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FoeyiisDnDCore.MODID, name);
+            ResourceLocation id = ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, name);
             inst.removeModifier(id);
             inst.addPermanentModifier(new AttributeModifier(id, value, AttributeModifier.Operation.ADD_VALUE));
         }
