@@ -1,7 +1,7 @@
 package me.foeyii.fdndcore.client.tooltip;
 
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.dice.Dice;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -68,7 +68,7 @@ public class TooltipHandler {
                 .append(" ")
                 .append(Component.translatable("attribute.name.generic.attack_roll_bonus"))
                 .withStyle(ChatFormatting.DARK_GREEN);
-        tooltips.set(++insertIndex, bonusLine);
+        tooltips.add(insertIndex + 1, bonusLine);
         DnDCore.LOGGER.info("onItemTooltip: Closed");
     }
 
