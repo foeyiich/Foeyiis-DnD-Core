@@ -24,7 +24,7 @@ public class AbilityScoreManager {
         }
 
         public static final float STRENGTH_ATTACK_DAMAGE = 0.3f;
-        public static final float CONSTITUION_MAX_HEALTH = 4.f;
+        public static final float CONSTITUTION_MAX_HEALTH = 4.f;
         public static final float DEXTERITY_MOVEMENT_SPEED = 0.04f;
         public static final float DEXTERITY_SNEAKING_SPEED = 0.02f;
         public static final float WISDOM_FOLLOW_RANGE = 4.f;
@@ -61,7 +61,7 @@ public class AbilityScoreManager {
                     bonuses.add(new AttributeBonus(Attributes.ATTACK_DAMAGE, "str_attack_damage", mod * AttributeModifierRate.STRENGTH_ATTACK_DAMAGE));
 
             case CONSTITUTION ->
-                    bonuses.add(new AttributeBonus(Attributes.MAX_HEALTH, "con_health", mod * AttributeModifierRate.CONSTITUION_MAX_HEALTH));
+                    bonuses.add(new AttributeBonus(Attributes.MAX_HEALTH, "con_health", mod * AttributeModifierRate.CONSTITUTION_MAX_HEALTH));
 
             case DEXTERITY -> {
                 bonuses.add(new AttributeBonus(Attributes.MOVEMENT_SPEED, "dex_move_speed", mod * AttributeModifierRate.DEXTERITY_MOVEMENT_SPEED));
