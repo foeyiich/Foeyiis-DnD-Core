@@ -5,7 +5,7 @@ import me.foeyii.fdndcore.data.DnDAttributes;
 import me.foeyii.fdndcore.data.DnDDataComponents;
 import me.foeyii.fdndcore.data.map.CombatItem;
 import me.foeyii.fdndcore.data.map.EnchantmentBonus;
-import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.dice.Dice;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

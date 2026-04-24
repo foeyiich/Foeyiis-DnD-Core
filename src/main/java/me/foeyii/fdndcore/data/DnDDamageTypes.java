@@ -1,7 +1,7 @@
 package me.foeyii.fdndcore.data;
 
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.manager.damage.DamageType;
+import me.foeyii.fdndcore.logic.damage.DamageType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

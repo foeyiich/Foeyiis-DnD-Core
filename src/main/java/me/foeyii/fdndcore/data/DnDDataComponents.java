@@ -1,7 +1,7 @@
 package me.foeyii.fdndcore.data;
 
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.dice.Dice;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;

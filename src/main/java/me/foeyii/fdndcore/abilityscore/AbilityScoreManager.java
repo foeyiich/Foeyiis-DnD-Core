@@ -1,6 +1,7 @@
-package me.foeyii.fdndcore.manager.abilityscore;
+package me.foeyii.fdndcore.abilityscore;
 
 import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.data.DnDAttachments;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,30 +9,14 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
-
-import static me.foeyii.fdndcore.DnDCore.ATTACHMENT_TYPES;
 
 public class AbilityScoreManager {
 
     public record AttributeBonus(Holder<Attribute> attribute, String modifierId, double value) {
     }
-
-    public static void register(IEventBus bus) {
-        NeoForge.EVENT_BUS.register(new AbilityScoreEventHandler());
-    }
-
-    public static final Supplier<AttachmentType<AbilityScoreContainer>> ATTACHMENT_TYPE =
-            ATTACHMENT_TYPES.register("stats", () -> AttachmentType.builder(AbilityScoreContainer::new)
-                    .serialize(new AbilityScoreSerializer())
-                    .copyOnDeath()
-                    .build());
 
     public static class AttributeModifierRate {
         private AttributeModifierRate() {
@@ -46,9 +31,9 @@ public class AbilityScoreManager {
     }
 
     public static void syncAttribute(LivingEntity entity, AbilityScoreContainer.Types type) {
-        getBonuses(entity, type).forEach(bonus -> {
-            applyModifier(entity, bonus.attribute(), bonus.modifierId(), bonus.value);
-        });
+        getBonuses(entity, type).forEach(bonus ->
+                applyModifier(entity, bonus.attribute(), bonus.modifierId(), bonus.value)
+        );
     }
 
     public static void syncAttributes(LivingEntity entity) {
@@ -67,7 +52,7 @@ public class AbilityScoreManager {
     }
 
     public static List<AttributeBonus> getBonuses(LivingEntity entity, AbilityScoreContainer.Types type) {
-        AbilityScoreContainer stats = entity.getData(ATTACHMENT_TYPE);
+        AbilityScoreContainer stats = entity.getData(DnDAttachments.ABILITY_SCORE_CONTAINER);
         int mod = stats.getScoreModifier(type);
         List<AttributeBonus> bonuses = new ArrayList<>();
 
@@ -84,7 +69,9 @@ public class AbilityScoreManager {
             }
             case WISDOM ->
                     bonuses.add(new AttributeBonus(Attributes.FOLLOW_RANGE, "wis_range", mod * AttributeModifierRate.WISDOM_FOLLOW_RANGE));
-
+            default -> {
+                // Skip
+            }
         }
         return bonuses;
     }

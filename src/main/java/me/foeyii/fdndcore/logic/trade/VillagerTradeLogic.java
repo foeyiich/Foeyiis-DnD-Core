@@ -2,8 +2,8 @@ package me.foeyii.fdndcore.logic.trade;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.manager.abilityscore.AbilityScore;
-import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.abilityscore.AbilityScore;
+import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.MerchantOffer;

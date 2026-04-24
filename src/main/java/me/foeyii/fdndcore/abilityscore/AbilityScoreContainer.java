@@ -1,7 +1,8 @@
-package me.foeyii.fdndcore.manager.abilityscore;
+package me.foeyii.fdndcore.abilityscore;
 
 import lombok.Getter;
 import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.data.DnDAttachments;
 import me.foeyii.fdndcore.utility.DnDUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.EnumMap;
 
 @Getter
-public class AbilityScoreContainer {
+public final class AbilityScoreContainer {
 
     @Getter
     public enum Types {
@@ -41,7 +42,6 @@ public class AbilityScoreContainer {
     private final EnumMap<Types, Integer> abilities = new EnumMap<>(Types.class);
 
     public AbilityScoreContainer() {
-        abilities.clear();
         abilities.put(Types.STRENGTH, DEFAULT_VALUE);
         abilities.put(Types.DEXTERITY, DEFAULT_VALUE);
         abilities.put(Types.CONSTITUTION, DEFAULT_VALUE);
@@ -81,7 +81,7 @@ public class AbilityScoreContainer {
     }
 
     public static @NotNull AbilityScoreContainer get(@NotNull LivingEntity entity) {
-        return entity.getData(AbilityScoreManager.ATTACHMENT_TYPE);
+        return entity.getData(DnDAttachments.ABILITY_SCORE_CONTAINER);
     }
 
 }

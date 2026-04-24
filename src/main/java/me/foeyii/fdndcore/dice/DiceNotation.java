@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.manager.dice;
+package me.foeyii.fdndcore.dice;
 
 import org.jetbrains.annotations.NotNull;
 

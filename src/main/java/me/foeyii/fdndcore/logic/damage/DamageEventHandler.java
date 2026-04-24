@@ -1,9 +1,9 @@
-package me.foeyii.fdndcore.manager.damage;
+package me.foeyii.fdndcore.logic.damage;
 
 import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
 import me.foeyii.fdndcore.data.DnDDamageTypes;
-import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreContainer;
-import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.dice.Dice;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

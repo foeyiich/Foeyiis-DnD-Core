@@ -2,9 +2,9 @@ package me.foeyii.fdndcore.command.subcommand;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import me.foeyii.fdndcore.manager.dice.Dice;
-import me.foeyii.fdndcore.manager.dice.DiceNotation;
-import me.foeyii.fdndcore.manager.dice.exception.InvalidDiceNotationException;
+import me.foeyii.fdndcore.dice.Dice;
+import me.foeyii.fdndcore.dice.DiceNotation;
+import me.foeyii.fdndcore.dice.exception.InvalidDiceNotationException;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
 import me.foeyii.fdndcore.utility.FText;
 import net.minecraft.commands.CommandSourceStack;
@@ -84,6 +84,7 @@ public class ItemSubcommand {
 
         if (itemStack.is(Items.AIR)) {
             source.sendSystemMessage(Component.literal(FText.formatPrefixed("&cNo Item Is Being Hold!")));
+            return 0;
         }
 
         DnDItemUtils.setCustomDiceDamage(itemStack, dice);

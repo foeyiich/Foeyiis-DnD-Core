@@ -1,8 +1,8 @@
 package me.foeyii.fdndcore.logic.combat;
 
-import me.foeyii.fdndcore.manager.abilityscore.AbilityScore;
-import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreContainer;
-import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.abilityscore.AbilityScore;
+import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.dice.Dice;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;

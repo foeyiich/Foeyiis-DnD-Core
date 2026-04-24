@@ -1,6 +1,6 @@
-package me.foeyii.fdndcore.manager.damage;
+package me.foeyii.fdndcore.logic.damage;
 
-import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.dice.Dice;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +15,7 @@ public class DamagePool {
     private boolean isRolled = false;
 
     public void addDice(DamageType type, @NotNull Dice dice) {
-        if (dice.count() == 0) return;
-
+        if (dice.count() == 0 && dice.modifier() == 0) return;
         diceQueue.computeIfAbsent(type, k -> new ArrayList<>()).add(dice);
     }
 

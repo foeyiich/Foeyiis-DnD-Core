@@ -1,7 +1,9 @@
-package me.foeyii.fdndcore.manager.abilityscore;
+package me.foeyii.fdndcore.abilityscore;
 
 import lombok.Getter;
+import me.foeyii.fdndcore.abilityscore.event.AbilityScoreChangedEvent;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
@@ -16,13 +18,13 @@ public class AbilityScore {
     }
 
     public void setScore(AbilityScoreContainer.Types type, int score) {
+        int oldScore = container.getScore(type);
         container.setScore(type, score);
-        AbilityScoreManager.syncAttribute(entity, type);
+        NeoForge.EVENT_BUS.post(new AbilityScoreChangedEvent(entity, type, oldScore, score));
     }
 
     public void setAllScore(int score) {
         container.setAllScore(score);
-        AbilityScoreManager.syncAttributes(entity);
     }
 
     public int getScore(AbilityScoreContainer.Types type) {

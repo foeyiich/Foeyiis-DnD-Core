@@ -59,6 +59,10 @@ public class TooltipHandler {
 
         int attackRollBonus = DnDItemUtils.getAttackRollBonus(stack);
         if (attackRollBonus == 0) return;
+        insertIndex++;
+
+        if (tooltips.get(insertIndex + 1).contains(Component.translatable("attribute.name.generic.attack_speed")))
+            insertIndex++;
 
         String attackRoll = attackRollBonus > 0 ?
                 "+" + attackRollBonus :
@@ -68,7 +72,7 @@ public class TooltipHandler {
                 .append(" ")
                 .append(Component.translatable("attribute.name.generic.attack_roll_bonus"))
                 .withStyle(ChatFormatting.DARK_GREEN);
-        tooltips.add(insertIndex + 1, bonusLine);
+        tooltips.add(insertIndex, bonusLine);
         DnDCore.LOGGER.info("onItemTooltip: Closed");
     }
 

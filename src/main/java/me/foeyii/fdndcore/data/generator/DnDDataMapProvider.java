@@ -3,7 +3,7 @@ package me.foeyii.fdndcore.data.generator;
 import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.data.DnDDataMaps;
 import me.foeyii.fdndcore.data.map.CombatItem;
-import me.foeyii.fdndcore.manager.dice.Dice;
+import me.foeyii.fdndcore.dice.Dice;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;

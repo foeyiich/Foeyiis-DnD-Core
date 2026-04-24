@@ -1,7 +1,7 @@
-package me.foeyii.fdndcore.manager.abilityscore.event;
+package me.foeyii.fdndcore.abilityscore.event;
 
 import lombok.Getter;
-import me.foeyii.fdndcore.manager.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
 import org.jetbrains.annotations.NotNull;
