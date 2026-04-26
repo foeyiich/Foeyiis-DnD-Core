@@ -36,6 +36,6 @@ public class DnDCore {
 
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
-        MainCommand.register(event.getDispatcher());
+        MainCommand.register(event.getDispatcher(), event.getBuildContext());
     }
 }

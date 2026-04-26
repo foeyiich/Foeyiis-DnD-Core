@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.logic.attribute;
+package me.foeyii.fdndcore.event;
 
 import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.data.DnDAttributes;
@@ -13,8 +13,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 
 @EventBusSubscriber(modid = DnDCore.MODID)
-public class AttributeModifierLogic {
-    private AttributeModifierLogic() {
+public class AttributeEvents {
+    private AttributeEvents() {
         /* This utility class should not be instantiated */
     }
 
@@ -31,7 +31,7 @@ public class AttributeModifierLogic {
                             data.attackRollBonus(),
                             AttributeModifier.Operation.ADD_VALUE
                     ),
-                    EquipmentSlotGroup.HAND
+                    EquipmentSlotGroup.MAINHAND
             );
         }
     }

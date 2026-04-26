@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.dice.exception;
+package me.foeyii.fdndcore.system.dice.exception;
 
 public class IllegalDiceSidesException extends RuntimeException {
 

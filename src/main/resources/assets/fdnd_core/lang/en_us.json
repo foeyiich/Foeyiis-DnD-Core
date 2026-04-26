@@ -1,10 +1,16 @@
 {
   "itemGroup.fdnd_core": "DnD Core",
   "attribute.name.generic.attack_roll_bonus": "Attack Roll Bonus",
-  "fdndcore.ability_score.name.strength": "Strength",
-  "fdndcore.ability_score.name.dexterity": "Dexterity",
-  "fdndcore.ability_score.name.constitution": "Constitution",
-  "fdndcore.ability_score.name.intelligence": "Intelligence",
-  "fdndcore.ability_score.name.wisdom": "Wisdom",
-  "fdndcore.ability_score.name.charisma": "Charisma"
+  "ability_score.fdnd_core.strength": "Strength",
+  "ability_score.fdnd_core.strength.abbr": "STR",
+  "ability_score.fdnd_core.dexterity": "Dexterity",
+  "ability_score.fdnd_core.dexterity.abbr": "DEX",
+  "ability_score.fdnd_core.constitution": "Constitution",
+  "ability_score.fdnd_core.constitution.abbr": "CON",
+  "ability_score.fdnd_core.intelligence": "Intelligence",
+  "ability_score.fdnd_core.intelligence.abbr": "INT",
+  "ability_score.fdnd_core.wisdom": "Wisdom",
+  "ability_score.fdnd_core.wisdom.abbr": "WIS",
+  "ability_score.fdnd_core.charisma": "Charisma",
+  "ability_score.fdnd_core.charisma.abbr": "CHA"
 }

@@ -1,9 +1,12 @@
-package me.foeyii.fdndcore.logic.damage;
+package me.foeyii.fdndcore.event;
 
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.data.DnDAbilityScoreType;
 import me.foeyii.fdndcore.data.DnDDamageTypes;
-import me.foeyii.fdndcore.dice.Dice;
+import me.foeyii.fdndcore.system.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.system.damage.DamagePool;
+import me.foeyii.fdndcore.system.damage.DamageType;
+import me.foeyii.fdndcore.system.dice.Dice;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -24,8 +27,8 @@ import java.util.UUID;
 import java.util.WeakHashMap;
 
 @EventBusSubscriber(modid = DnDCore.MODID)
-public class DamageEventHandler {
-    private DamageEventHandler() {
+public class DamageEvents {
+    private DamageEvents() {
         /* This utility class should not be instantiated */
     }
 
@@ -41,7 +44,7 @@ public class DamageEventHandler {
 
         int baseDamage = (int) attacker.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
         baseDamage = Math.clamp(
-                (long) baseDamage + AbilityScoreContainer.get(attacker).getScoreModifier(AbilityScoreContainer.Types.STRENGTH),
+                (long) baseDamage + AbilityScoreContainer.get(attacker).getScoreModifier(DnDAbilityScoreType.STRENGTH),
                 -5,
                 5
         );

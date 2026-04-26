@@ -1,6 +1,6 @@
-package me.foeyii.fdndcore.logic.damage;
+package me.foeyii.fdndcore.system.damage;
 
-import me.foeyii.fdndcore.dice.Dice;
+import me.foeyii.fdndcore.system.dice.Dice;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 

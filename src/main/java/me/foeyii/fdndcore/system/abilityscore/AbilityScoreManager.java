@@ -1,6 +1,7 @@
-package me.foeyii.fdndcore.abilityscore;
+package me.foeyii.fdndcore.system.abilityscore;
 
 import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.data.DnDAbilityScoreType;
 import me.foeyii.fdndcore.data.DnDAttachments;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -30,14 +31,14 @@ public class AbilityScoreManager {
         public static final float WISDOM_FOLLOW_RANGE = 4.f;
     }
 
-    public static void syncAttribute(LivingEntity entity, AbilityScoreContainer.Types type) {
+    public static void syncAttribute(LivingEntity entity, Holder<AbilityScoreType> type) {
         getBonuses(entity, type).forEach(bonus ->
                 applyModifier(entity, bonus.attribute(), bonus.modifierId(), bonus.value)
         );
     }
 
     public static void syncAttributes(LivingEntity entity) {
-        for (AbilityScoreContainer.Types type : AbilityScoreContainer.Types.values()) {
+        for (Holder<AbilityScoreType> type : DnDAbilityScoreType.ABILITY_SCORE_TYPES.getEntries()) {
             syncAttribute(entity, type);
         }
     }
@@ -51,28 +52,22 @@ public class AbilityScoreManager {
         }
     }
 
-    public static List<AttributeBonus> getBonuses(LivingEntity entity, AbilityScoreContainer.Types type) {
+    public static List<AttributeBonus> getBonuses(LivingEntity entity, Holder<AbilityScoreType> type) {
         AbilityScoreContainer stats = entity.getData(DnDAttachments.ABILITY_SCORE_CONTAINER);
         int mod = stats.getScoreModifier(type);
         List<AttributeBonus> bonuses = new ArrayList<>();
 
-        switch (type) {
-            case STRENGTH ->
-                    bonuses.add(new AttributeBonus(Attributes.ATTACK_DAMAGE, "str_attack_damage", mod * AttributeModifierRate.STRENGTH_ATTACK_DAMAGE));
-
-            case CONSTITUTION ->
-                    bonuses.add(new AttributeBonus(Attributes.MAX_HEALTH, "con_health", mod * AttributeModifierRate.CONSTITUTION_MAX_HEALTH));
-
-            case DEXTERITY -> {
-                bonuses.add(new AttributeBonus(Attributes.MOVEMENT_SPEED, "dex_move_speed", mod * AttributeModifierRate.DEXTERITY_MOVEMENT_SPEED));
-                bonuses.add(new AttributeBonus(Attributes.SNEAKING_SPEED, "dex_sneak_speed", mod * AttributeModifierRate.DEXTERITY_SNEAKING_SPEED));
-            }
-            case WISDOM ->
-                    bonuses.add(new AttributeBonus(Attributes.FOLLOW_RANGE, "wis_range", mod * AttributeModifierRate.WISDOM_FOLLOW_RANGE));
-            default -> {
-                // Skip
-            }
+        if (type == DnDAbilityScoreType.STRENGTH) {
+            bonuses.add(new AttributeBonus(Attributes.ATTACK_DAMAGE, "str_attack_damage", mod * AttributeModifierRate.STRENGTH_ATTACK_DAMAGE));
+        } else if (type == DnDAbilityScoreType.CONSTITUTION) {
+            bonuses.add(new AttributeBonus(Attributes.MAX_HEALTH, "con_health", mod * AttributeModifierRate.CONSTITUTION_MAX_HEALTH));
+        } else if (type == DnDAbilityScoreType.DEXTERITY) {
+            bonuses.add(new AttributeBonus(Attributes.MOVEMENT_SPEED, "dex_move_speed", mod * AttributeModifierRate.DEXTERITY_MOVEMENT_SPEED));
+            bonuses.add(new AttributeBonus(Attributes.SNEAKING_SPEED, "dex_sneak_speed", mod * AttributeModifierRate.DEXTERITY_SNEAKING_SPEED));
+        } else if (type == DnDAbilityScoreType.WISDOM) {
+            bonuses.add(new AttributeBonus(Attributes.FOLLOW_RANGE, "wis_range", mod * AttributeModifierRate.WISDOM_FOLLOW_RANGE));
         }
+
         return bonuses;
     }
 

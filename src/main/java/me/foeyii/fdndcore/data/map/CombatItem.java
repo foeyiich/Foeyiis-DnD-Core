@@ -3,7 +3,7 @@ package me.foeyii.fdndcore.data.map;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.foeyii.fdndcore.data.DnDDataMaps;
-import me.foeyii.fdndcore.dice.Dice;
+import me.foeyii.fdndcore.system.dice.Dice;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;

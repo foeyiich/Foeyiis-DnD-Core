@@ -1,9 +1,10 @@
-package me.foeyii.fdndcore.logic.trade;
+package me.foeyii.fdndcore.event;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.abilityscore.AbilityScore;
-import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.data.DnDAbilityScoreType;
+import me.foeyii.fdndcore.system.abilityscore.AbilityScore;
+import me.foeyii.fdndcore.system.abilityscore.AbilityScoreContainer;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -12,8 +13,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 @EventBusSubscriber(modid = DnDCore.MODID)
-public class VillagerTradeLogic {
-    private VillagerTradeLogic() {
+public class TradeEvents {
+    private TradeEvents() {
         /* This utility class should not be instantiated */
     }
 
@@ -33,7 +34,7 @@ public class VillagerTradeLogic {
 
         Player player = event.getEntity();
         AbilityScore abilityScore = new AbilityScore(player);
-        int charismaModifier = abilityScore.getScoreModifier(AbilityScoreContainer.Types.CHARISMA);
+        int charismaModifier = abilityScore.getScoreModifier(DnDAbilityScoreType.CHARISMA);
         int specialPriceDiff = charismaSpecialPriceDiff.getOrDefault(
                 charismaModifier,
                 calculateSpecialPriceDiffFromMod(charismaModifier)

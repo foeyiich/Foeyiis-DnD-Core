@@ -1,7 +1,7 @@
-package me.foeyii.fdndcore.client.tooltip;
+package me.foeyii.fdndcore.client.event;
 
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.dice.Dice;
+import me.foeyii.fdndcore.system.dice.Dice;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -17,8 +17,8 @@ import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import java.util.List;
 
 @EventBusSubscriber(modid = DnDCore.MODID, value = Dist.CLIENT)
-public class TooltipHandler {
-    private TooltipHandler() {
+public class TooltipEvents {
+    private TooltipEvents() {
         /* This utility class should not be instantiated */
     }
 
@@ -73,7 +73,6 @@ public class TooltipHandler {
                 .append(Component.translatable("attribute.name.generic.attack_roll_bonus"))
                 .withStyle(ChatFormatting.DARK_GREEN);
         tooltips.add(insertIndex, bonusLine);
-        DnDCore.LOGGER.info("onItemTooltip: Closed");
     }
 
 

@@ -5,6 +5,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import me.foeyii.fdndcore.command.subcommand.AbilityScoreSubcommand;
 import me.foeyii.fdndcore.command.subcommand.DiceSubcommand;
 import me.foeyii.fdndcore.command.subcommand.ItemSubcommand;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
@@ -13,10 +14,10 @@ public class MainCommand {
         /* This utility class should not be instantiated */
     }
 
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
         final LiteralCommandNode<CommandSourceStack> fdndNode = dispatcher.register(Commands.literal("fdnd")
                 .requires(cs -> cs.hasPermission(2))
-                .then(AbilityScoreSubcommand.register())
+                .then(AbilityScoreSubcommand.register(context))
                 .then(DiceSubcommand.register())
                 .then(ItemSubcommand.register())
         );

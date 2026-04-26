@@ -1,7 +1,8 @@
-package me.foeyii.fdndcore.abilityscore.event;
+package me.foeyii.fdndcore.system.abilityscore.event;
 
 import lombok.Getter;
-import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.system.abilityscore.AbilityScoreType;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.Event;
 import org.jetbrains.annotations.NotNull;
@@ -10,16 +11,16 @@ import org.jetbrains.annotations.NotNull;
 public final class AbilityScoreChangedEvent extends Event {
 
     private final LivingEntity entity;
-    private final AbilityScoreContainer.Types scoreType;
+    private final Holder<AbilityScoreType> type;
     private final int oldValue;
     private final int newValue;
 
     public AbilityScoreChangedEvent(@NotNull LivingEntity entity,
-                                    AbilityScoreContainer.Types scoreType,
+                                    Holder<AbilityScoreType> type,
                                     int oldValue,
                                     int newValue) {
         this.entity = entity;
-        this.scoreType = scoreType;
+        this.type = type;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }

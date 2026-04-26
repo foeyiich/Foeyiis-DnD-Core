@@ -1,4 +1,4 @@
-package me.foeyii.fdndcore.dice;
+package me.foeyii.fdndcore.system.dice;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

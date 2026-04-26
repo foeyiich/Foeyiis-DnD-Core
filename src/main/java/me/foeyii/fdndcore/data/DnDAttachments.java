@@ -1,8 +1,8 @@
 package me.foeyii.fdndcore.data;
 
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
-import me.foeyii.fdndcore.abilityscore.AbilityScoreSerializer;
+import me.foeyii.fdndcore.system.abilityscore.AbilityScoreContainer;
+import me.foeyii.fdndcore.system.abilityscore.AbilityScoreSerializer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;

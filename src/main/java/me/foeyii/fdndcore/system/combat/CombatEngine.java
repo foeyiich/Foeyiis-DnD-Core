@@ -1,8 +1,8 @@
-package me.foeyii.fdndcore.logic.combat;
+package me.foeyii.fdndcore.system.combat;
 
-import me.foeyii.fdndcore.abilityscore.AbilityScore;
-import me.foeyii.fdndcore.abilityscore.AbilityScoreContainer;
-import me.foeyii.fdndcore.dice.Dice;
+import me.foeyii.fdndcore.data.DnDAbilityScoreType;
+import me.foeyii.fdndcore.system.abilityscore.AbilityScore;
+import me.foeyii.fdndcore.system.dice.Dice;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -45,7 +45,7 @@ public class CombatEngine {
         if (roll == 1) return false;
 
         AbilityScore abilityScore = new AbilityScore(attacker);
-        int attackRollBonus = abilityScore.getScoreModifier(AbilityScoreContainer.Types.STRENGTH);
+        int attackRollBonus = abilityScore.getScoreModifier(DnDAbilityScoreType.STRENGTH);
 
         int totalAttack = roll + attackRollBonus;
 

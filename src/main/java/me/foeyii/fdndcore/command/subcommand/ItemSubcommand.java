@@ -2,9 +2,9 @@ package me.foeyii.fdndcore.command.subcommand;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import me.foeyii.fdndcore.dice.Dice;
-import me.foeyii.fdndcore.dice.DiceNotation;
-import me.foeyii.fdndcore.dice.exception.InvalidDiceNotationException;
+import me.foeyii.fdndcore.system.dice.Dice;
+import me.foeyii.fdndcore.system.dice.DiceNotation;
+import me.foeyii.fdndcore.system.dice.exception.InvalidDiceNotationException;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
 import me.foeyii.fdndcore.utility.FText;
 import net.minecraft.commands.CommandSourceStack;
