@@ -3,6 +3,7 @@ package me.foeyii.fdndcore.client.event;
 import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.system.dice.Dice;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
+import me.foeyii.fdndcore.utility.DnDLogger;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -13,6 +14,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -22,19 +24,21 @@ public class TooltipEvents {
         /* This utility class should not be instantiated */
     }
 
+    private static final Logger LOGGER = DnDLogger.getLogger(TooltipEvents.class);
+
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
-        DnDCore.LOGGER.info("onItemTooltip: Called");
+        LOGGER.info("onItemTooltip: Called");
         ItemStack stack = event.getItemStack();
         Player entity = event.getEntity();
         if (entity == null) {
-            DnDCore.LOGGER.info("onItemTooltip: Player is null");
+            LOGGER.info("onItemTooltip: Player is null");
             return;
         }
         Level level = entity.level();
 
         Dice dice = DnDItemUtils.getDice(stack, level);
-        DnDCore.LOGGER.info("onItemTooltip: Data is not null");
+        LOGGER.info("onItemTooltip: Data is not null");
 
         List<Component> tooltips = event.getToolTip();
         int insertIndex = -1;

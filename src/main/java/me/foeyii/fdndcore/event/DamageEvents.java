@@ -8,6 +8,7 @@ import me.foeyii.fdndcore.system.damage.DamagePool;
 import me.foeyii.fdndcore.system.damage.DamageType;
 import me.foeyii.fdndcore.system.dice.Dice;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
+import me.foeyii.fdndcore.utility.DnDLogger;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -82,7 +83,7 @@ public class DamageEvents {
                         .append(Component.literal(type.name()).withStyle(style -> style.withColor(color)));
             });
 
-            DnDCore.LOGGER.info(component.getString());
+            DnDLogger.getLogger(DamageEvents.class).info(component.getString());
             attacker.sendSystemMessage(component);
 
         }

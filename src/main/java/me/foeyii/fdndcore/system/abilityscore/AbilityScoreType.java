@@ -4,12 +4,15 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.foeyii.fdndcore.data.DnDAbilityScoreType;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public record AbilityScoreType(String displayName, String abbreviation, String description,
+public record AbilityScoreType(String translatableDisplayName, String translatableAbbreviation,
+                               String translatableDescription,
                                Optional<ResourceLocation> icon, Optional<Integer> defaultValue) {
 
     public AbilityScoreType(String displayName) {
@@ -26,6 +29,18 @@ public record AbilityScoreType(String displayName, String abbreviation, String d
 
     public AbilityScoreType(String displayName, String abbreviation, String description, Optional<ResourceLocation> icon) {
         this(displayName, abbreviation, description, icon, Optional.of(0));
+    }
+
+    public @NotNull String displayName() {
+        return Component.translatable(translatableDisplayName).getString();
+    }
+
+    public @NotNull String abbreviation() {
+        return Component.translatable(translatableAbbreviation).getString();
+    }
+
+    public @NotNull String description() {
+        return Component.translatable(translatableDescription).getString();
     }
 
     public static final Codec<AbilityScoreType> CODEC = RecordCodecBuilder.create(

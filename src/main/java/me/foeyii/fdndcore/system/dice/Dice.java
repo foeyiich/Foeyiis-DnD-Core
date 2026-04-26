@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import me.foeyii.fdndcore.DnDCore;
+import me.foeyii.fdndcore.utility.DnDLogger;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +47,7 @@ public record Dice(int count, int sides, int modifier) {
         if (SIDES_MUST_BE_EVEN && sides % 2 != 0) {
             int oldSides = sides;
             sides++;
-            DnDCore.LOGGER.warn("Invalid sides for Dice ({}). returning with {} sides", oldSides, sides);
+            DnDLogger.getLogger(Dice.class).warn("Invalid sides for Dice ({}). returning with {} sides", oldSides, sides);
         }
     }
 

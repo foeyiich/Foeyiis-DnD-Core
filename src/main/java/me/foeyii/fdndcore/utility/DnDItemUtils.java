@@ -1,6 +1,5 @@
 package me.foeyii.fdndcore.utility;
 
-import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.data.DnDAttributes;
 import me.foeyii.fdndcore.data.DnDDataComponents;
 import me.foeyii.fdndcore.data.map.CombatItem;
@@ -10,6 +9,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +17,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DnDItemUtils {
+
+    private static final Logger LOGGER = DnDLogger.getLogger(DnDItemUtils.class);
+
     private DnDItemUtils() {
         /* This utility class should not be instantiated */
     }
@@ -33,11 +36,11 @@ public class DnDItemUtils {
 
         CombatItem combatItem = CombatItem.get(item);
         if (combatItem == null) {
-            DnDCore.LOGGER.info("No Combat Item Provided. ({})", item);
+            LOGGER.info("No Combat Item Provided. ({})", item);
             return null;
         }
         return combatItem.dice().orElseGet(() -> {
-            DnDCore.LOGGER.info("No Dice Provided for {}", item);
+            LOGGER.info("No Dice Provided for {}", item);
             return null;
         });
 

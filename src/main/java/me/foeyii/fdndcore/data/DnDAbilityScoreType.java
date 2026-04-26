@@ -3,7 +3,6 @@ package me.foeyii.fdndcore.data;
 import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScoreType;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -24,38 +23,38 @@ public class DnDAbilityScoreType {
 
     public static final DeferredHolder<AbilityScoreType, AbilityScoreType> STRENGTH =
             ABILITY_SCORE_TYPES.register("strength", () -> new AbilityScoreType(
-                    Component.translatable("ability_score.fdnd_core.strength").getString(),
-                    Component.translatable("ability_score.fdnd_core.strength.abbr").getString()
+                    "ability_score.fdnd_core.strength",
+                    "ability_score.fdnd_core.strength.abbr"
             ));
 
     public static final DeferredHolder<AbilityScoreType, AbilityScoreType> DEXTERITY =
             ABILITY_SCORE_TYPES.register("dexterity", () -> new AbilityScoreType(
-                    Component.translatable("ability_score.fdnd_core.dexterity").getString(),
-                    Component.translatable("ability_score.fdnd_core.dexterity.abbr").getString()
+                    "ability_score.fdnd_core.dexterity",
+                    "ability_score.fdnd_core.dexterity.abbr"
             ));
 
     public static final DeferredHolder<AbilityScoreType, AbilityScoreType> CONSTITUTION =
             ABILITY_SCORE_TYPES.register("constitution", () -> new AbilityScoreType(
-                    Component.translatable("ability_score.fdnd_core.constitution").getString(),
-                    Component.translatable("ability_score.fdnd_core.constitution.abbr").getString()
+                    "ability_score.fdnd_core.constitution",
+                    "ability_score.fdnd_core.constitution.abbr"
             ));
 
     public static final DeferredHolder<AbilityScoreType, AbilityScoreType> INTELLIGENCE =
             ABILITY_SCORE_TYPES.register("intelligence", () -> new AbilityScoreType(
-                    Component.translatable("ability_score.fdnd_core.intelligence").getString(),
-                    Component.translatable("ability_score.fdnd_core.intelligence.abbr").getString()
+                    "ability_score.fdnd_core.intelligence",
+                    "ability_score.fdnd_core.intelligence.abbr"
             ));
 
     public static final DeferredHolder<AbilityScoreType, AbilityScoreType> WISDOM =
             ABILITY_SCORE_TYPES.register("wisdom", () -> new AbilityScoreType(
-                    Component.translatable("ability_score.fdnd_core.wisdom").getString(),
-                    Component.translatable("ability_score.fdnd_core.wisdom.abbr").getString()
+                    "ability_score.fdnd_core.wisdom",
+                    "ability_score.fdnd_core.wisdom.abbr"
             ));
 
     public static final DeferredHolder<AbilityScoreType, AbilityScoreType> CHARISMA =
             ABILITY_SCORE_TYPES.register("charisma", () -> new AbilityScoreType(
-                    Component.translatable("ability_score.fdnd_core.charisma").getString(),
-                    Component.translatable("ability_score.fdnd_core.charisma.abbr").getString()
+                    "ability_score.fdnd_core.charisma",
+                    "ability_score.fdnd_core.charisma.abbr"
             ));
 
     public static void register(IEventBus bus) {

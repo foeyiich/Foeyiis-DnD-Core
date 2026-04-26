@@ -2,11 +2,11 @@ package me.foeyii.fdndcore.command.subcommand;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.data.DnDAbilityScoreType;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScore;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScoreContainer;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScoreType;
+import me.foeyii.fdndcore.utility.DnDLogger;
 import me.foeyii.fdndcore.utility.FText;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -90,7 +90,7 @@ public class AbilityScoreSubcommand {
             AbilityScore targetAbilityScore = new AbilityScore((LivingEntity) target);
             targetAbilityScore.setScore(type, value);
         }
-        String msg = FText.formatPrefixed("&6" + affectedPlayers + " &eentity affected &7(" + type + " = " + AbilityScoreContainer.clamp(value) + ")");
+        String msg = FText.formatPrefixed("&6" + affectedPlayers + " &eentity affected &7(" + type.value().displayName() + " = " + AbilityScoreContainer.clamp(value) + ")");
         source.sendSystemMessage(Component.literal(msg));
 
         return affectedPlayers;
@@ -112,7 +112,7 @@ public class AbilityScoreSubcommand {
 
     private static boolean isEntityALivingEntity(Entity entity) {
         if (!(entity instanceof LivingEntity)) {
-            DnDCore.LOGGER.error("Target is not a LivingEntity!");
+            DnDLogger.getLogger(AbilityScoreSubcommand.class).error("Target is not a LivingEntity!");
             return false;
         }
         return true;
