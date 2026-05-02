@@ -1,5 +1,6 @@
 package me.foeyii.fdndcore.system.damage;
 
+import me.foeyii.fdndcore.system.dice.DamageDice;
 import me.foeyii.fdndcore.system.dice.Dice;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
@@ -14,9 +15,11 @@ public class DamagePool {
     private final Map<DamageType, Integer> rolledResults = new LinkedHashMap<>();
     private boolean isRolled = false;
 
-    public void addDice(DamageType type, @NotNull Dice dice) {
+    public void addDice(@NotNull DamageDice damageDice) {
+        Dice dice = damageDice.baseDice();
         if (dice.count() == 0 && dice.modifier() == 0) return;
-        diceQueue.computeIfAbsent(type, k -> new ArrayList<>()).add(dice);
+
+        diceQueue.computeIfAbsent(damageDice.damageType().value(), k -> new ArrayList<>()).add(dice);
     }
 
     public void rollAll(RandomSource random) {

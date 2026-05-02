@@ -1,8 +1,8 @@
 package me.foeyii.fdndcore.data;
 
 import me.foeyii.fdndcore.DnDCore;
-import me.foeyii.fdndcore.data.map.CombatItem;
-import me.foeyii.fdndcore.data.map.EnchantmentBonus;
+import me.foeyii.fdndcore.data.map.WeaponProperties;
+import me.foeyii.fdndcore.enchantment.DiceEnchantmentBonus;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -13,27 +13,27 @@ import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 
 @EventBusSubscriber(modid = DnDCore.MODID)
-public class DnDDataMaps {
+public final class DnDDataMaps {
     private DnDDataMaps() {
         /* This utility class should not be instantiated */
     }
 
-    public static final DataMapType<Item, CombatItem> COMBAT_ITEMS = DataMapType.builder(
-            ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, "combat_items"),
+    public static final DataMapType<Item, WeaponProperties> WEAPON_PROPERTIES = DataMapType.builder(
+            ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, "weapon_properties"),
             Registries.ITEM,
-            CombatItem.CODEC
+            WeaponProperties.CODEC
     ).build();
 
-    public static final DataMapType<Enchantment, EnchantmentBonus> ENCHANTMENT_BONUSES = DataMapType.builder(
-            ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, "enchantment_bonuses"),
+    public static final DataMapType<Enchantment, DiceEnchantmentBonus> DICE_ENCHANTMENT_BONUSES = DataMapType.builder(
+            ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, "dice_enchantment_bonuses"),
             Registries.ENCHANTMENT,
-            EnchantmentBonus.CODEC
+            DiceEnchantmentBonus.CODEC
     ).build();
 
     @SubscribeEvent
     static void register(RegisterDataMapTypesEvent event) {
-        event.register(COMBAT_ITEMS);
-        event.register(ENCHANTMENT_BONUSES);
+        event.register(WEAPON_PROPERTIES);
+        event.register(DICE_ENCHANTMENT_BONUSES);
     }
 
 }

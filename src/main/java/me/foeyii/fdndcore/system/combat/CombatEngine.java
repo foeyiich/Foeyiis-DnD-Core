@@ -44,7 +44,7 @@ public class CombatEngine {
         if (roll == 20) return true;
         if (roll == 1) return false;
 
-        AbilityScore abilityScore = new AbilityScore(attacker);
+        AbilityScore abilityScore = AbilityScore.get(attacker);
         int attackRollBonus = abilityScore.getScoreModifier(DnDAbilityScoreType.STRENGTH);
 
         int totalAttack = roll + attackRollBonus;

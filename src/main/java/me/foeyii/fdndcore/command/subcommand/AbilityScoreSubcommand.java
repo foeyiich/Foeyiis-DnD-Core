@@ -3,8 +3,8 @@ package me.foeyii.fdndcore.command.subcommand;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import me.foeyii.fdndcore.data.DnDAbilityScoreType;
+import me.foeyii.fdndcore.data.DnDRegistries;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScore;
-import me.foeyii.fdndcore.system.abilityscore.AbilityScoreContainer;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScoreType;
 import me.foeyii.fdndcore.utility.DnDLogger;
 import me.foeyii.fdndcore.utility.FText;
@@ -37,12 +37,12 @@ public class AbilityScoreSubcommand {
                 )
                 .then(Commands.literal("set")
                         .then(Commands.argument("set_targets", EntityArgument.entity())
-                                .then(Commands.argument("type", ResourceArgument.resource(mainContext, DnDAbilityScoreType.REGISTRY_KEY))
-                                        .then(Commands.argument("value", IntegerArgumentType.integer(AbilityScoreContainer.MIN_VALUE, AbilityScoreContainer.MAX_VALUE))
+                                .then(Commands.argument("type", ResourceArgument.resource(mainContext, DnDRegistries.ABILITY_SCORE))
+                                        .then(Commands.argument("value", IntegerArgumentType.integer(AbilityScore.MIN_VALUE, AbilityScore.MAX_VALUE))
                                                 .executes(context -> setAbilityScore(
                                                                 context.getSource(),
                                                                 EntityArgument.getEntities(context, "set_targets"),
-                                                                ResourceArgument.getResource(context, "type", DnDAbilityScoreType.REGISTRY_KEY),
+                                                                ResourceArgument.getResource(context, "type", DnDRegistries.ABILITY_SCORE),
                                                                 IntegerArgumentType.getInteger(context, "value")
                                                         )
                                                 )
@@ -56,7 +56,7 @@ public class AbilityScoreSubcommand {
                                         setAllAbilityScore(
                                                 context.getSource(),
                                                 EntityArgument.getEntities(context, "targets"),
-                                                AbilityScoreContainer.DEFAULT_VALUE
+                                                AbilityScore.DEFAULT_VALUE
                                         )
                                 )
                         )
@@ -69,7 +69,7 @@ public class AbilityScoreSubcommand {
 
         if (!isEntityALivingEntity(target))
             return 0;
-        AbilityScoreContainer targetScores = AbilityScoreContainer.get((LivingEntity) target);
+        AbilityScore targetScores = AbilityScore.get((LivingEntity) target);
 
         StringBuilder result = new StringBuilder();
         result.append(FText.formatPrefixed("&6" + target.getName().getString() + "'s Stats:\n"));
@@ -87,10 +87,10 @@ public class AbilityScoreSubcommand {
         for (Entity target : targets) {
             if (!isEntityALivingEntity(target))
                 return 0;
-            AbilityScore targetAbilityScore = new AbilityScore((LivingEntity) target);
+            AbilityScore targetAbilityScore = AbilityScore.get((LivingEntity) target);
             targetAbilityScore.setScore(type, value);
         }
-        String msg = FText.formatPrefixed("&6" + affectedPlayers + " &eentity affected &7(" + type.value().displayName() + " = " + AbilityScoreContainer.clamp(value) + ")");
+        String msg = FText.formatPrefixed("&6" + affectedPlayers + " &eentity affected &7(" + type.value().displayName() + " = " + AbilityScore.clamp(value) + ")");
         source.sendSystemMessage(Component.literal(msg));
 
         return affectedPlayers;
@@ -101,7 +101,7 @@ public class AbilityScoreSubcommand {
         for (Entity target : targets) {
             if (!isEntityALivingEntity(target))
                 return 0;
-            AbilityScore targetAbilityScore = new AbilityScore((LivingEntity) target);
+            AbilityScore targetAbilityScore = AbilityScore.get((LivingEntity) target);
             targetAbilityScore.setAllScore(value);
         }
         String msg = FText.formatPrefixed("&6" + affectedPlayers + " &eentity affected &7(STATS RESET)");

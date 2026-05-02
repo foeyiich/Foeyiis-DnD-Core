@@ -2,24 +2,18 @@ package me.foeyii.fdndcore.data;
 
 import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScoreType;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 
-public class DnDAbilityScoreType {
+public final class DnDAbilityScoreType {
     private DnDAbilityScoreType() {
         /* This utility class should not be instantiated */
     }
 
-    public static final ResourceKey<Registry<AbilityScoreType>> REGISTRY_KEY =
-            ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, "ability_score"));
-
     public static final DeferredRegister<AbilityScoreType> ABILITY_SCORE_TYPES =
-            DeferredRegister.create(REGISTRY_KEY, DnDCore.MODID);
+            DeferredRegister.create(DnDRegistries.ABILITY_SCORE, DnDCore.MODID);
 
     public static final DeferredHolder<AbilityScoreType, AbilityScoreType> STRENGTH =
             ABILITY_SCORE_TYPES.register("strength", () -> new AbilityScoreType(
@@ -60,7 +54,7 @@ public class DnDAbilityScoreType {
     public static void register(IEventBus bus) {
         ABILITY_SCORE_TYPES.register(bus);
         ABILITY_SCORE_TYPES.makeRegistry(builder ->
-                new RegistryBuilder<>(REGISTRY_KEY).sync(true));
+                new RegistryBuilder<>(DnDRegistries.ABILITY_SCORE).sync(true));
     }
 
 }

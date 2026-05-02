@@ -1,15 +1,21 @@
 package me.foeyii.fdndcore.command.subcommand;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import me.foeyii.fdndcore.system.dice.Dice;
+import me.foeyii.fdndcore.data.DnDRegistries;
+import me.foeyii.fdndcore.system.damage.DamageType;
 import me.foeyii.fdndcore.system.dice.DiceNotation;
-import me.foeyii.fdndcore.system.dice.exception.InvalidDiceNotationException;
+import me.foeyii.fdndcore.utility.DnDDamageResolver;
 import me.foeyii.fdndcore.utility.DnDItemUtils;
 import me.foeyii.fdndcore.utility.FText;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,101 +29,213 @@ public class ItemSubcommand {
         /* This utility class should not be instantiated */
     }
 
-    public static ArgumentBuilder<CommandSourceStack, ?> register() {
+    public static ArgumentBuilder<CommandSourceStack, ?> register(CommandBuildContext mainContext) {
+        final String damageDiceLiteral = "damage";
+        final String damageTypeLiteral = "damage_type";
+        final String attackRollBonusLiteral = "attack_roll_bonus";
+
+        final String diceNotationLiteral = "dice_notation";
+        final String targetLiteral = "target";
+
         return Commands.literal("item")
-                .then(Commands.literal("dice_damage")
-                        .then(Commands.literal("set")
-                                .then(Commands.argument("dice_notation", StringArgumentType.word())
-                                        .executes(context ->
-                                                setItemDiceDamage(
+                .then(Commands.literal("set")
+                        .then(Commands.literal(damageDiceLiteral)
+                                .then(Commands.argument(diceNotationLiteral, StringArgumentType.word())
+                                        .executes(context -> Set.itemDamage(
+                                                context.getSource(),
+                                                StringArgumentType.getString(context, diceNotationLiteral),
+                                                null
+                                        ))
+                                        .then(Commands.argument(targetLiteral, EntityArgument.entity())
+                                                .executes(context -> Set.itemDamage(
                                                         context.getSource(),
-                                                        StringArgumentType.getString(context, "dice_notation"),
-                                                        null
-                                                )
-                                        )
-                                )
-                                .then(Commands.argument("target", EntityArgument.entity())
-                                        .executes(context ->
-                                                setItemDiceDamage(
-                                                        context.getSource(),
-                                                        StringArgumentType.getString(context, "dice_notation"),
-                                                        EntityArgument.getEntity(context, "target")
-                                                )
+                                                        StringArgumentType.getString(context, diceNotationLiteral),
+                                                        EntityArgument.getEntity(context, targetLiteral)
+                                                ))
                                         )
                                 )
                         )
-                        .then(Commands.literal("get")
-                                .executes(context -> getItemDiceDamage(context.getSource(), null))
-                                .then(Commands.argument("target", EntityArgument.entity())
-                                        .executes(context -> getItemDiceDamage(
+                        .then(Commands.literal(damageTypeLiteral)
+                                .then(Commands.argument("type", ResourceArgument.resource(mainContext, DnDRegistries.DAMAGE_TYPE))
+                                        .executes(context -> Set.itemDamageType(
+                                                context.getSource(),
+                                                ResourceArgument.getResource(context, "type", DnDRegistries.DAMAGE_TYPE),
+                                                null
+                                        ))
+                                        .then(Commands.argument(targetLiteral, EntityArgument.entity())
+                                                .executes(context -> Set.itemDamageType(
                                                         context.getSource(),
-                                                        EntityArgument.getEntity(context, "target")
-                                                )
+                                                        ResourceArgument.getResource(context, "type", DnDRegistries.DAMAGE_TYPE),
+                                                        EntityArgument.getEntity(context, targetLiteral)
+                                                ))
                                         )
+                                )
+                        )
+                        .then(Commands.literal(attackRollBonusLiteral)
+                                .then(Commands.argument("value", IntegerArgumentType.integer())
+                                        .executes(context -> Set.itemAttackRollBonus(
+                                                context.getSource(),
+                                                IntegerArgumentType.getInteger(context, "value"),
+                                                null
+                                        ))
+                                        .then(Commands.argument(targetLiteral, EntityArgument.entity())
+                                                .executes(context -> Set.itemAttackRollBonus(
+                                                        context.getSource(),
+                                                        IntegerArgumentType.getInteger(context, "value"),
+                                                        EntityArgument.getEntity(context, targetLiteral)
+                                                ))
+                                        )
+                                )
+                        )
+                )
+                .then(Commands.literal("get")
+                        .then(Commands.literal(damageDiceLiteral)
+                                .executes(context -> Get.itemDamage(
+                                        context.getSource(),
+                                        null
+                                ))
+                                .then(Commands.argument(targetLiteral, EntityArgument.entity())
+                                        .executes(context -> Get.itemDamage(
+                                                context.getSource(),
+                                                EntityArgument.getEntity(context, targetLiteral)
+                                        ))
+                                )
+                        )
+                        .then(Commands.literal(damageTypeLiteral)
+                                .executes(context -> Get.itemDamageType(
+                                        context.getSource(),
+                                        null
+                                ))
+                                .then(Commands.argument(targetLiteral, EntityArgument.entity())
+                                        .executes(context -> Get.itemDamageType(
+                                                context.getSource(),
+                                                EntityArgument.getEntity(context, targetLiteral)
+                                        ))
+                                )
+                        )
+                        .then(Commands.literal(attackRollBonusLiteral)
+                                .executes(context -> Get.itemAttackRollBonus(
+                                        context.getSource(),
+                                        null
+                                ))
+                                .then(Commands.argument(targetLiteral, EntityArgument.entity())
+                                        .executes(context -> Get.itemDamageType(
+                                                context.getSource(),
+                                                EntityArgument.getEntity(context, targetLiteral)
+                                        ))
                                 )
                         )
                 )
                 ;
     }
 
-    private static int setItemDiceDamage(CommandSourceStack source, String damage, @Nullable Entity target) {
+    private static class Set {
+        private static int itemDamage(CommandSourceStack source, String damage, @Nullable Entity target) {
+            ItemStack itemStack = getMainHandItemStack(source, target);
+            if (itemStack == null) return 0;
 
+            DnDItemUtils.setOverrideDiceDamage(itemStack, DiceNotation.parse(damage));
+            return 1;
+        }
+
+        private static int itemDamageType(CommandSourceStack source, Holder<DamageType> damageType, @Nullable Entity target) {
+            ItemStack itemStack = getMainHandItemStack(source, target);
+            if (itemStack == null) return 0;
+
+            DnDItemUtils.setOverrideDamageType(itemStack, damageType);
+            return 1;
+        }
+
+
+        private static int itemAttackRollBonus(CommandSourceStack source, int attackRollBonus, @Nullable Entity target) {
+            ItemStack itemStack = getMainHandItemStack(source, target);
+            if (itemStack == null) return 0;
+
+            DnDItemUtils.setOverrideAttackDamageRoll(itemStack, attackRollBonus);
+            return 1;
+        }
+    }
+
+    private static class Get {
+        private static int itemDamage(CommandSourceStack source, @Nullable Entity target) {
+            ItemStack itemStack = getMainHandItemStack(source, target);
+            if (itemStack == null) return 0;
+
+            if (target == null) return 0;
+            source.sendSystemMessage(
+                    Component.literal(FText.PREFIX)
+                            .append(target.getName().getString())
+                            .append("'s ")
+                            .append(itemStack.getDisplayName())
+                            .append(" deals")
+                            .append(DnDDamageResolver.resolveEffectiveDiceDamage(itemStack).toString())
+                            .append(" Damage")
+                            .withStyle(ChatFormatting.YELLOW)
+            );
+            return 1;
+        }
+
+        private static int itemDamageType(CommandSourceStack source, @Nullable Entity target) {
+            ItemStack itemStack = getMainHandItemStack(source, target);
+            if (itemStack == null) return 0;
+
+            if (target == null) return 0;
+            source.sendSystemMessage(
+                    Component.literal(FText.PREFIX)
+                            .append(target.getName().getString())
+                            .append("'s ")
+                            .append(itemStack.getDisplayName())
+                            .append(" deals")
+                            .append(DnDDamageResolver.resolveEffectiveDamageType(itemStack).toString())
+                            .append(" Damage Type")
+                            .withStyle(ChatFormatting.YELLOW)
+            );
+            return 1;
+        }
+
+        private static int itemAttackRollBonus(CommandSourceStack source, @Nullable Entity target) {
+            ItemStack itemStack = getMainHandItemStack(source, target);
+            if (itemStack == null) return 0;
+
+            if (target == null) return 0;
+
+            int attackRollBonus = DnDDamageResolver.resolveAttackRollBonus(itemStack);
+            String attackRollBonusDisplay = attackRollBonus > 0 ? "+" + attackRollBonus : String.valueOf(attackRollBonus);
+            source.sendSystemMessage(
+                    Component.literal(FText.PREFIX)
+                            .append(target.getName().getString())
+                            .append("'s ")
+                            .append(itemStack.getDisplayName())
+                            .append(" gives")
+                            .append(attackRollBonusDisplay)
+                            .append(" Attack Roll Bonus")
+                            .withStyle(ChatFormatting.YELLOW)
+            );
+            return 1;
+        }
+    }
+
+    private static @Nullable ItemStack getMainHandItemStack(CommandSourceStack source, @Nullable Entity target) {
         if (target == null) {
-            if (!isExecutorAPlayer(source)) return 0;
+            if (!isExecutorAPlayer(source)) {
+                source.sendSystemMessage(Component.literal("Only players can execute this command!"));
+                return null;
+            }
             target = source.getPlayer();
         }
 
         if (!(target instanceof LivingEntity livingEntity)) {
             source.sendSystemMessage(Component.literal(FText.formatPrefixed("&cTarget is not a living entity!")));
-            return 0;
-        }
-
-        Dice dice;
-        try {
-            dice = DiceNotation.parse(damage);
-        } catch (InvalidDiceNotationException e) {
-            source.sendSystemMessage(Component.literal(FText.formatPrefixed("&cInvalid Dice Notation!")));
-            return 0;
+            return null;
         }
 
         ItemStack itemStack = livingEntity.getMainHandItem();
-
         if (itemStack.is(Items.AIR)) {
             source.sendSystemMessage(Component.literal(FText.formatPrefixed("&cNo Item Is Being Hold!")));
-            return 0;
+            return null;
         }
-
-        DnDItemUtils.setCustomDiceDamage(itemStack, dice);
-        return 1;
+        return itemStack;
     }
-
-    private static int getItemDiceDamage(CommandSourceStack source, @Nullable Entity target) {
-        String targetLabel = "Executor";
-        if (target == null) {
-            if (!source.isPlayer()) {
-                source.sendSystemMessage(Component.literal(FText.formatPrefixed("&c" + targetLabel + " is not a player!")));
-                return 0;
-            }
-            target = source.getPlayer();
-        } else {
-            targetLabel = target.getName().toString();
-        }
-        if (!(target instanceof LivingEntity livingEntityTarget)) {
-            source.sendSystemMessage(Component.literal(FText.formatPrefixed("&c" + targetLabel + " is not a Living Entity!")));
-            return 0;
-        }
-        ItemStack mainHandItem = livingEntityTarget.getMainHandItem();
-
-        if (mainHandItem.isEmpty()) {
-            source.sendSystemMessage(Component.literal(FText.formatPrefixed("&c" + targetLabel + "'s main hand item is empty!")));
-            return 0;
-        }
-
-        source.sendSystemMessage(Component.literal(FText.formatPrefixed("&eItem Dice Damage: " + DnDItemUtils.getDice(mainHandItem, target.level()))));
-
-        return 1;
-    }
-
 
     private static boolean isExecutorAPlayer(@NotNull CommandSourceStack source) {
         if (!source.isPlayer()) {

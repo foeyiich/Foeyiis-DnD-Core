@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import me.foeyii.fdndcore.system.dice.exception.UnmergeableDiceException;
 import me.foeyii.fdndcore.utility.DnDLogger;
 import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
@@ -28,19 +29,15 @@ public record Dice(int count, int sides, int modifier) {
         }
     }
 
-    public static final Dice FULL = Dice.of(1, 20, 0);
-    public static final Dice EMPTY = Dice.of(0, 0, 0);
-
     public static final boolean SIDES_MUST_BE_EVEN = true;
     public static final int MAX_DICE_COUNTS = 10;
     public static final int MAX_DICE_SIDES = 20;
 
-    public Dice {
-        if (count == 0)
-            sides = 0;
-        if (sides == 0)
-            count = 0;
+    public static final Dice MAX = Dice.of(MAX_DICE_COUNTS, MAX_DICE_SIDES, 0);
+    public static final Dice FULL = Dice.of(1, MAX_DICE_SIDES, 0);
+    public static final Dice EMPTY = Dice.of(0, 0, 0);
 
+    public Dice {
         count = Math.clamp(count, 0, MAX_DICE_COUNTS);
         sides = Math.clamp(sides, 0, MAX_DICE_SIDES);
 
@@ -63,7 +60,7 @@ public record Dice(int count, int sides, int modifier) {
         ));
     }
 
-    public static Dice of(int count, int sides) {
+    public static @NotNull Dice of(int count, int sides) {
         return of(count, sides, 0);
     }
 
@@ -103,7 +100,7 @@ public record Dice(int count, int sides, int modifier) {
 
 
     public boolean isEmpty() {
-        return count == 0 && sides == 0;
+        return count == 0 && sides == 0 && modifier == 0;
     }
 
     public int getMaxRoll() {
@@ -112,6 +109,33 @@ public record Dice(int count, int sides, int modifier) {
 
     public int getMinRoll() {
         return count + modifier;
+    }
+
+    public boolean isMergeable(@NotNull Dice d2) {
+        return isMergeable(this, d2);
+    }
+
+    public Dice merge(@NotNull Dice d2) {
+        return merge(this, d2);
+    }
+
+    public static boolean isMergeable(@NotNull Dice d1, @NotNull Dice d2) {
+        return (d1.count == d2.count && d1.sides == d2.sides);
+    }
+
+    public static Dice merge(@NotNull Dice d1, @NotNull Dice d2) {
+        if (d1.isEmpty()) return d2;
+        if (d2.isEmpty()) return d1;
+        if (!isMergeable(d1, d2)) throw new UnmergeableDiceException("'" + d1 + "' and '" + d2 + "' is unmergeable.");
+        return Dice.of(d1.count() + d2.count(), d1.sides() + d2.sides(), d1.modifier() + d2.modifier());
+    }
+
+    public static @NotNull Dice add(@NotNull Dice d1, @NotNull Dice d2) {
+        return Dice.of(d1.count() + d2.count(), d1.sides() + d2.sides(), d1.modifier() + d2.modifier());
+    }
+
+    public static @NotNull Dice subtract(@NotNull Dice d1, @NotNull Dice d2) {
+        return Dice.of(d1.count() - d2.count(), d1.sides() - d2.sides(), d1.modifier() - d2.modifier());
     }
 
     @Override

@@ -32,4 +32,5 @@ public class DnDCore {
     public void onRegisterCommands(RegisterCommandsEvent event) {
         MainCommand.register(event.getDispatcher(), event.getBuildContext());
     }
+
 }

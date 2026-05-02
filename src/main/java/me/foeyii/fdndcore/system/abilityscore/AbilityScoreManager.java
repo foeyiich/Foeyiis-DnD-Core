@@ -53,7 +53,7 @@ public class AbilityScoreManager {
     }
 
     public static List<AttributeBonus> getBonuses(LivingEntity entity, Holder<AbilityScoreType> type) {
-        AbilityScoreContainer stats = entity.getData(DnDAttachments.ABILITY_SCORE_CONTAINER);
+        AbilityScore stats = entity.getData(DnDAttachments.ABILITY_SCORE);
         int mod = stats.getScoreModifier(type);
         List<AttributeBonus> bonuses = new ArrayList<>();
 

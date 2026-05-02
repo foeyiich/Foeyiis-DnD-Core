@@ -1,5 +1,6 @@
 {
   "itemGroup.fdnd_core": "DnD Core",
+  "attribute.name.generic.attack_damage": "%1$s %2$s Damage",
   "attribute.name.generic.attack_roll_bonus": "Attack Roll Bonus",
   "ability_score.fdnd_core.strength": "Strength",
   "ability_score.fdnd_core.strength.abbr": "STR",
@@ -12,5 +13,15 @@
   "ability_score.fdnd_core.wisdom": "Wisdom",
   "ability_score.fdnd_core.wisdom.abbr": "WIS",
   "ability_score.fdnd_core.charisma": "Charisma",
-  "ability_score.fdnd_core.charisma.abbr": "CHA"
+  "ability_score.fdnd_core.charisma.abbr": "CHA",
+  "damage_type.fdnd_core.physical.bludgeoning": "Bludgeoning",
+  "damage_type.fdnd_core.physical.piercing": "Piercing",
+  "damage_type.fdnd_core.physical.slashing": "Slashing",
+  "damage_type.fdnd_core.elemental.fire": "Fire",
+  "damage_type.fdnd_core.elemental.cold": "Cold",
+  "damage_type.fdnd_core.elemental.poison": "Poison",
+  "damage_type.fdnd_core.elemental.wither": "Wither",
+  "damage_type.fdnd_core.elemental.lightning": "Lightning",
+  "damage_type.fdnd_core.elemental.sonic": "Sonic",
+  "damage_type.fdnd_core.elemental.force": "Force"
 }

@@ -18,7 +18,7 @@ public class DiceSubcommand {
     }
 
     public static ArgumentBuilder<CommandSourceStack, ?> register() {
-        return Commands.literal("dice")
+        return Commands.literal("baseDice")
                 .then(Commands.literal("roll")
                         .then(Commands.argument("formattedDiceRoll", StringArgumentType.string())
                                 .executes(context ->

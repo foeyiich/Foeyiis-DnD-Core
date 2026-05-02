@@ -19,7 +19,7 @@ public class MainCommand {
                 .requires(cs -> cs.hasPermission(2))
                 .then(AbilityScoreSubcommand.register(context))
                 .then(DiceSubcommand.register())
-                .then(ItemSubcommand.register())
+                .then(ItemSubcommand.register(context))
         );
         dispatcher.register(
                 Commands.literal("dnd")

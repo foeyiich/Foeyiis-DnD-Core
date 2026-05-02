@@ -7,20 +7,20 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import org.jetbrains.annotations.Nullable;
 
-public class AbilityScoreSerializer implements IAttachmentSerializer<Tag, AbilityScoreContainer> {
+public class AbilityScoreSerializer implements IAttachmentSerializer<Tag, AbilityScore> {
 
     @Override
-    public AbilityScoreContainer read(IAttachmentHolder holder, Tag tag, HolderLookup.Provider provider) {
-        return AbilityScoreContainer.CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), tag)
+    public AbilityScore read(IAttachmentHolder holder, Tag tag, HolderLookup.Provider provider) {
+        return AbilityScore.CODEC.parse(provider.createSerializationContext(NbtOps.INSTANCE), tag)
                 .resultOrPartial(error -> {
 
                 })
-                .orElseGet(AbilityScoreContainer::new);
+                .orElseGet(AbilityScore::new);
     }
 
     @Override
-    public @Nullable Tag write(AbilityScoreContainer stats, HolderLookup.Provider provider) {
-        return AbilityScoreContainer.CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), stats)
+    public @Nullable Tag write(AbilityScore stats, HolderLookup.Provider provider) {
+        return AbilityScore.CODEC.encodeStart(provider.createSerializationContext(NbtOps.INSTANCE), stats)
                 .resultOrPartial(error -> {
                 })
                 .orElse(null);

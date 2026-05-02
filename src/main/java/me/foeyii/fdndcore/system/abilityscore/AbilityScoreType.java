@@ -2,7 +2,7 @@ package me.foeyii.fdndcore.system.abilityscore;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import me.foeyii.fdndcore.data.DnDAbilityScoreType;
+import me.foeyii.fdndcore.data.DnDRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryFixedCodec;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public record AbilityScoreType(String translatableDisplayName, String translatableAbbreviation,
                                String translatableDescription,
-                               Optional<ResourceLocation> icon, Optional<Integer> defaultValue) {
+                               Optional<ResourceLocation> icon, Optional<Integer> defaultScore) {
 
     public AbilityScoreType(String displayName) {
         this(displayName, displayName.substring(0, 3), "", Optional.empty(), Optional.of(0));
@@ -49,11 +49,11 @@ public record AbilityScoreType(String translatableDisplayName, String translatab
                     Codec.STRING.fieldOf("abbreviation").forGetter(AbilityScoreType::abbreviation),
                     Codec.STRING.fieldOf("description").forGetter(AbilityScoreType::description),
                     ResourceLocation.CODEC.optionalFieldOf("icon").forGetter(AbilityScoreType::icon),
-                    Codec.INT.optionalFieldOf("default_value").forGetter(AbilityScoreType::defaultValue)
+                    Codec.INT.optionalFieldOf("default_value").forGetter(AbilityScoreType::defaultScore)
             ).apply(instance, AbilityScoreType::new)
     );
 
     public static final Codec<Holder<AbilityScoreType>> HOLDER_CODEC =
-            RegistryFixedCodec.create(DnDAbilityScoreType.REGISTRY_KEY);
+            RegistryFixedCodec.create(DnDRegistries.ABILITY_SCORE);
 
 }

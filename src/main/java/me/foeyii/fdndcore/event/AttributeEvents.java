@@ -3,7 +3,7 @@ package me.foeyii.fdndcore.event;
 import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.data.DnDAttributes;
 import me.foeyii.fdndcore.data.DnDDataMaps;
-import me.foeyii.fdndcore.data.map.CombatItem;
+import me.foeyii.fdndcore.data.map.WeaponProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,14 +21,14 @@ public class AttributeEvents {
     @SubscribeEvent
     public static void onAttributeModifiers(ItemAttributeModifierEvent event) {
         ItemStack stack = event.getItemStack();
-        CombatItem data = stack.getItemHolder().getData(DnDDataMaps.COMBAT_ITEMS);
+        WeaponProperties data = stack.getItemHolder().getData(DnDDataMaps.WEAPON_PROPERTIES);
 
-        if (data != null && data.attackRollBonus() != 0) {
+        if (data != null && data.attackRollBonus().orElse(0) != 0) {
             event.addModifier(
                     DnDAttributes.ATTACK_ROLL_BONUS,
                     new AttributeModifier(
                             ResourceLocation.fromNamespaceAndPath(DnDCore.MODID, "weapon_bonus"),
-                            data.attackRollBonus(),
+                            data.attackRollBonus().get(),
                             AttributeModifier.Operation.ADD_VALUE
                     ),
                     EquipmentSlotGroup.MAINHAND

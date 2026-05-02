@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import me.foeyii.fdndcore.DnDCore;
 import me.foeyii.fdndcore.data.DnDAbilityScoreType;
 import me.foeyii.fdndcore.system.abilityscore.AbilityScore;
-import me.foeyii.fdndcore.system.abilityscore.AbilityScoreContainer;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -21,7 +20,7 @@ public class TradeEvents {
     private static final Int2IntOpenHashMap charismaSpecialPriceDiff = new Int2IntOpenHashMap();
 
     static {
-        for (int i = AbilityScoreContainer.MIN_VALUE; i <= AbilityScoreContainer.MAX_VALUE; i++) {
+        for (int i = AbilityScore.MIN_VALUE; i <= AbilityScore.MAX_VALUE; i++) {
             charismaSpecialPriceDiff.put(i, calculateSpecialPriceDiffFromMod(i));
         }
     }
@@ -33,7 +32,7 @@ public class TradeEvents {
             return;
 
         Player player = event.getEntity();
-        AbilityScore abilityScore = new AbilityScore(player);
+        AbilityScore abilityScore = AbilityScore.get(player);
         int charismaModifier = abilityScore.getScoreModifier(DnDAbilityScoreType.CHARISMA);
         int specialPriceDiff = charismaSpecialPriceDiff.getOrDefault(
                 charismaModifier,
